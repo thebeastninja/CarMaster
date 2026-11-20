@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(255,77,31,0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 10%, rgba(255,159,28,0.06), transparent 60%),
+      #07080a;
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+  ::selection { background: rgba(255,77,31,.35); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #0c0d10; }
+  ::-webkit-scrollbar-thumb { background: #2a2e37; border-radius: 10px; border: 2px solid #0c0d10; }
+  ::-webkit-scrollbar-thumb:hover { background: #3a3f4b; }
+  input[type=range] { accent-color: #ff4d1f; }
+}
+
+@layer components {
+  .container-x { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+  .card { @apply rounded-2xl border border-white/[0.07] bg-ink-850/80 backdrop-blur shadow-card; }
+  .card-hover { @apply transition duration-300 hover:-translate-y-0.5 hover:border-racing-500/40 hover:shadow-glow; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-[.98] disabled:opacity-40 disabled:pointer-events-none; }
+  .btn-primary { @apply btn bg-gradient-to-r from-racing-500 to-amberx-500 text-black hover:brightness-110 shadow-glow; }
+  .btn-ghost { @apply btn border border-white/10 bg-white/[0.03] text-zinc-200 hover:bg-white/[0.08] hover:border-white/20; }
+  .chip { @apply inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-medium text-zinc-300; }
+  .chip-active { @apply border-racing-500/60 bg-racing-500/15 text-racing-300; }
+  .input { @apply w-full rounded-xl border border-white/10 bg-ink-900 px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-racing-500/70 focus:ring-2 focus:ring-racing-500/20; }
+  .label { @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-zinc-400; }
+  .h-display { @apply font-display font-bold tracking-tight; }
+  .text-gradient { @apply bg-gradient-to-r from-racing-400 via-racing-500 to-amberx-500 bg-clip-text text-transparent; }
+  .eyebrow { @apply font-display text-xs font-bold uppercase tracking-[0.25em] text-racing-400; }
+  .stat-num { @apply font-display text-3xl font-bold text-white; }
+}
+
+/* Lesson prose */
+.prose-car h2 { @apply mt-10 mb-3 font-display text-2xl font-bold text-white; }
+.prose-car h3 { @apply mt-6 mb-2 font-display text-xl font-semibold text-zinc-100; }
+.prose-car p { @apply my-4 leading-8 text-zinc-300; }
+.prose-car ul { @apply my-4 space-y-2; }
+.prose-car li { @apply relative pl-6 leading-7 text-zinc-300; }
+.prose-car li::before { content: ''; @apply absolute left-1 top-[0.7rem] h-2 w-2 rotate-45 bg-racing-500; }
+.prose-car strong { @apply font-semibold text-white; }
+.prose-car em { @apply text-amberx-400 not-italic; }
+.prose-car blockquote { @apply my-6 rounded-xl border-l-4 border-racing-500 bg-racing-500/[0.07] px-5 py-4 text-zinc-200; }
+.prose-car table { @apply my-6 w-full overflow-hidden rounded-xl text-sm; }
+.prose-car th { @apply bg-white/[0.05] px-3 py-2 text-left font-semibold text-zinc-100; }
+.prose-car td { @apply border-t border-white/[0.06] px-3 py-2 text-zinc-300; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+.grid-bg {
+  background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@media print {
+  body { background: #fff !important; }
+  .no-print { display: none !important; }
+  .print-area { box-shadow: none !important; }
+}
+
+.prose-car ol.counter-list { counter-reset: step; }
+.prose-car ol.counter-list li { counter-increment: step; @apply pl-9; }
+.prose-car ol.counter-list li::before { content: counter(step); @apply absolute left-0 top-0.5 flex h-6 w-6 rotate-0 items-center justify-center rounded-full bg-racing-500/20 text-xs font-bold text-racing-300; }
+
+@keyframes flow { to { stroke-dashoffset: -32; } }
+@keyframes spinz { to { transform: rotate(360deg); } }
+@keyframes shake { 0%,100% { transform: translateX(0) } 25% { transform: translateX(-4px) } 75% { transform: translateX(4px) } }

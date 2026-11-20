@@ -1,0 +1,35 @@
+// Engine layouts for the Engines Lab
+export const engineTypes = [
+  { id: 'i3', name: 'Inline-3', layout: 'inline', cylinders: 3, firing: '240°', balance: 'Rocking couple (balance shaft common)', size: '0.8–1.6 L', sound: 'Thrummy, off-beat', pros: ['Light and compact', 'Efficient', 'Cheap'], cons: ['Some vibration', 'Less refined at high rpm'], examples: ['Toyota GR Yaris', 'Ford 1.0 EcoBoost', 'BMW i8'] },
+  { id: 'i4', name: 'Inline-4', layout: 'inline', cylinders: 4, firing: '180°', balance: 'Secondary vibration', size: '1.2–2.5 L', sound: 'Even, buzzy', pros: ['Most common engine', 'Compact & cheap', 'Great with turbos'], cons: ['Buzzy when revved', 'Less smooth than six-cylinders'], examples: ['Honda Civic Type R', 'VW Golf GTI', 'Mercedes-AMG A45'] },
+  { id: 'i6', name: 'Inline-6', layout: 'inline', cylinders: 6, firing: '120°', balance: 'Perfect', size: '2.5–3.5 L', sound: 'Silky, turbine-like', pros: ['Perfectly balanced', 'Smooth & durable', 'One head, simple'], cons: ['Long engine', 'Hard to fit transversely'], examples: ['Toyota 2JZ', 'BMW S58', 'Nissan RB26'] },
+  { id: 'v6', name: 'V6', layout: 'v', cylinders: 6, firing: '120°', balance: 'Good (60°), needs help at 90°', size: '2.5–4.0 L', sound: 'Raspy, purposeful', pros: ['Short and compact', 'Fits FWD cars', 'Good power'], cons: ['Two heads, more parts', 'Less smooth than I6'], examples: ['Nissan GT-R VR38', 'Ferrari 296', 'Ford EcoBoost 3.5'] },
+  { id: 'v8', name: 'V8', layout: 'v', cylinders: 8, firing: '90°', balance: 'Excellent (cross-plane)', size: '4.0–7.0 L', sound: 'Burble (cross-plane) or scream (flat-plane)', pros: ['Huge power & torque', 'Iconic sound', 'Compact for 8 cylinders'], cons: ['Heavy', 'Thirsty'], examples: ['Ford Coyote', 'Chevrolet LT2', 'Ferrari F154'] },
+  { id: 'v10', name: 'V10', layout: 'v', cylinders: 10, firing: '72°', balance: 'Good with split-pin crank', size: '5.0–8.4 L', sound: 'High-pitched howl', pros: ['Exotic sound', 'High revs', 'Rare and special'], cons: ['Expensive', 'Thirsty', 'Nearly extinct'], examples: ['Lamborghini Huracán', 'Lexus LFA', 'Dodge Viper'] },
+  { id: 'v12', name: 'V12', layout: 'v', cylinders: 12, firing: '60°', balance: 'Perfect', size: '5.2–6.75 L', sound: 'Spine-tingling wail', pros: ['Smoothest piston engine', 'Prestige', 'Huge power'], cons: ['Large & heavy', 'Very thirsty', 'Very expensive'], examples: ['Ferrari 12Cilindri', 'Lamborghini Revuelto', 'Rolls-Royce Phantom'] },
+  { id: 'flat4', name: 'Flat-4 (Boxer)', layout: 'flat', cylinders: 4, firing: '180°', balance: 'Very good (small rocking couple)', size: '1.6–2.5 L', sound: 'Rumble (with unequal headers)', pros: ['Low centre of gravity', 'Smooth for a four', 'Compact length'], cons: ['Wide', 'Harder servicing', 'Two heads'], examples: ['Subaru WRX', 'Toyota GR86', 'Porsche 718'] },
+  { id: 'flat6', name: 'Flat-6 (Boxer)', layout: 'flat', cylinders: 6, firing: '120°', balance: 'Perfect', size: '3.0–4.0 L', sound: 'Mechanical, rising howl', pros: ['Perfect balance', 'Low centre of gravity', 'Revs high'], cons: ['Wide', 'Complex packaging'], examples: ['Porsche 911', 'Porsche 911 GT3', 'Subaru Tribeca (H6)'] },
+  { id: 'rotary', name: 'Rotary (Wankel)', layout: 'rotary', cylinders: 2, firing: 'Every shaft rotation per rotor', balance: 'Excellent', size: '1.3 L (2 rotors)', sound: 'Buzzing, high-pitched brap', pros: ['Tiny and light', 'Very smooth', 'Revs to 9,000+'], cons: ['Thirsty', 'Burns oil', 'Apex seal wear'], examples: ['Mazda RX-7', 'Mazda RX-8', 'Mazda 787B'] },
+  { id: 'diesel', name: 'Diesel', layout: 'inline', cylinders: 4, firing: '180° (I4)', balance: 'As per layout', size: '1.5–6.7 L', sound: 'Clattery, deep', pros: ['20–30% more efficient', 'Massive low-rpm torque', 'Durable'], cons: ['NOx and soot', 'Complex after-treatment', 'Lower revs'], examples: ['Toyota Hilux 2.8', 'BMW B57', 'Cummins 6.7'] },
+  { id: 'electric', name: 'Electric Motor', layout: 'electric', cylinders: 0, firing: 'Continuous', balance: 'Perfect', size: '50–1,000+ kW', sound: 'Near-silent whine', pros: ['90–97% efficient', 'Instant torque', 'Few moving parts'], cons: ['Needs a heavy battery', 'Charging time'], examples: ['Tesla Model S Plaid', 'Rimac Nevera', 'Porsche Taycan'] },
+  { id: 'hybrid', name: 'Hybrid Powertrain', layout: 'hybrid', cylinders: 4, firing: '180° + electric', balance: 'As per engine', size: 'Engine + 1–3 motors', sound: 'Silent at low speed, then engine', pros: ['Excellent city economy', 'Regenerative braking', 'No range anxiety'], cons: ['Complexity', 'Extra weight'], examples: ['Toyota Prius', 'Ferrari SF90', 'Porsche 918'] },
+]
+
+export const engineParts = [
+  { name: 'Cylinder Block', desc: 'The main structure of the engine, made of cast iron or aluminium, containing the cylinders.' },
+  { name: 'Cylinder Head', desc: 'Sits on top of the block; contains valves, camshafts, ports and spark plugs or injectors.' },
+  { name: 'Piston', desc: 'Moves up and down in the cylinder, compressing the mixture and receiving combustion force.' },
+  { name: 'Piston Rings', desc: 'Seal the gap between piston and cylinder wall and scrape oil off the walls.' },
+  { name: 'Connecting Rod', desc: 'Links the piston to the crankshaft, converting linear to rotary motion.' },
+  { name: 'Crankshaft', desc: 'The main rotating shaft that turns the pistons\' motion into rotation.' },
+  { name: 'Camshaft', desc: 'Rotates at half crank speed; its lobes open the valves at the right moments.' },
+  { name: 'Valves', desc: 'Intake valves let air (and fuel) in; exhaust valves let burnt gas out.' },
+  { name: 'Timing Belt / Chain', desc: 'Keeps the camshaft(s) synchronised with the crankshaft.' },
+  { name: 'Flywheel', desc: 'Heavy disc on the crankshaft that smooths power pulses and engages the starter and clutch.' },
+  { name: 'Oil Pump & Sump', desc: 'The sump stores oil; the pump circulates it under pressure to all moving parts.' },
+  { name: 'Head Gasket', desc: 'Seals the head to the block, separating combustion gases, oil and coolant.' },
+  { name: 'Intake Manifold', desc: 'Distributes incoming air to each cylinder.' },
+  { name: 'Exhaust Manifold', desc: 'Collects exhaust gas from the cylinders and directs it to the exhaust or turbo.' },
+  { name: 'Fuel Injector', desc: 'Sprays precisely metered fuel into the port or cylinder.' },
+  { name: 'Spark Plug', desc: 'Creates the spark that ignites the mixture in petrol engines.' },
+]
