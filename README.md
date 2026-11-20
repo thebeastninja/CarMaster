@@ -15,7 +15,7 @@ Built with **React 18 + Vite + Tailwind CSS**. There is no backend: progress, XP
 | **Engines Lab** | Slow-motion 4-stroke engine, 13 engine layouts with animated schematics, interactive horsepower-vs-torque chart, turbo/supercharger/NA simulator, parts glossary |
 | **Pricing & Parts** | 40 parts with low/avg/high cost in USD and EUR, failure signs, DIY difficulty, lifespan and tips; a yearly running-cost calculator; maintenance schedule |
 | **Arcade** | Drag Race (any two real cars, Christmas-tree start, reaction time, physics from real 0–100 times), Guess the Car (blurred real photo + clues), Higher or Lower (spec showdown streaks), Rev Lab (live synthesised V8/V10/V12/flat-6/rotary/EV sound) |
-| **Quiz & Certification** | XP ranks, 14 badges, a quick quiz, a 30-question Final Exam and a printable **CarMaster Pro Certificate** with your name |
+| **Quiz & Certification** | XP ranks, 18 badges, a quick quiz, a 30-question Final Exam and a printable **CarMaster Pro Certificate** with your name |
 
 ### Interactive animations (SVG + `requestAnimationFrame`)
 - **Four-stroke cycle**: piston, crank, cams, valves, spark; play/pause, step and speed control
