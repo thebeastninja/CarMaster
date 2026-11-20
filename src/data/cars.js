@@ -162,6 +162,40 @@ const raw = [
   ['Lancia Delta HF Integrale Evo', 'Lancia', 'Classic', 1992, '2.0 L turbo I4', 210, 300, '5-speed manual', 'AWD', 5.7, 220, 'Petrol', 90000, 'Italy', 'The rally car that won six consecutive WRC manufacturers\' titles.', 'Lancia\'s Delta remains the most successful rally car of all time by titles.'],
 ]
 
+
+// Wikipedia article for each model (real photos are loaded from its lead image).
+const WIKI = {
+  'Toyota Camry Hybrid': 'Toyota Camry', 'Toyota RAV4 Hybrid': 'Toyota RAV4', 'Toyota Land Cruiser 300': 'Toyota Land Cruiser (J300)',
+  'Toyota GR86': 'Toyota 86', 'Toyota GR Supra 3.0': 'Toyota GR Supra', 'Toyota Supra Mk4 (A80)': 'Toyota Supra (A80)',
+  'Lexus LS 500': 'Lexus LS', 'Nissan GT-R (R35)': 'Nissan GT-R', 'Nissan Skyline GT-R (R34)': 'Nissan Skyline GT-R',
+  'Honda Civic Type R (FL5)': 'Honda Civic Type R', 'Honda CR-V Hybrid': 'Honda CR-V', 'Honda NSX (NA1)': 'Honda NSX (first generation)',
+  'Mazda MX-5 Miata': 'Mazda MX-5', 'Mazda RX-7 (FD)': 'Mazda RX-7', 'Subaru WRX STI (GR)': 'Subaru Impreza WRX STI',
+  'Mitsubishi Lancer Evolution X': 'Mitsubishi Lancer Evolution', 'Volkswagen Beetle (Type 1)': 'Volkswagen Beetle',
+  'Volkswagen ID.4': 'Volkswagen ID.4', 'Volkswagen Transporter (T6.1)': 'Volkswagen Transporter (T6)',
+  'BMW 3 Series (330i)': 'BMW 3 Series', 'BMW M3 Competition (G80)': 'BMW M3', 'BMW M3 (E30)': 'BMW M3 (E30)', 'BMW M5 (G90)': 'BMW M5',
+  'BMW i4 M50': 'BMW i4', 'Mercedes-Benz S-Class (S 580)': 'Mercedes-Benz S-Class', 'Mercedes-Benz G 63 AMG': 'Mercedes-Benz G-Class',
+  'Mercedes-AMG GT 63': 'Mercedes-AMG GT', 'Mercedes-Benz 300 SL Gullwing': 'Mercedes-Benz 300 SL', 'Audi RS 6 Avant': 'Audi RS 6',
+  'Audi R8 V10': 'Audi R8', 'Porsche 911 Carrera (992)': 'Porsche 911 (992)', 'Porsche 911 Turbo S': 'Porsche 911 Turbo',
+  'Porsche 911 GT3 RS': 'Porsche 911 GT3', 'Porsche Taycan Turbo S': 'Porsche Taycan',
+  'Ford Mustang GT': 'Ford Mustang (seventh generation)', 'Ford Mustang (1965)': 'Ford Mustang (first generation)',
+  'Ford GT (2017)': 'Ford GT', 'Ford GT40 Mk II': 'Ford GT40', 'Ford Bronco': 'Ford Bronco (sixth generation)',
+  'Chevrolet Corvette Stingray (C8)': 'Chevrolet Corvette (C8)', 'Chevrolet Corvette Z06 (C8)': 'Chevrolet Corvette (C8)',
+  'Chevrolet Camaro ZL1': 'Chevrolet Camaro (sixth generation)', 'Chevrolet Silverado 1500': 'Chevrolet Silverado',
+  'Chevrolet Bolt EV': 'Chevrolet Bolt', 'Chevrolet Chevelle SS 454': 'Chevrolet Chevelle', 'Dodge Challenger SRT Hellcat': 'Dodge Challenger (2008)',
+  'Dodge Challenger SRT Demon 170': 'Dodge Challenger SRT Demon', 'Dodge Viper ACR': 'Dodge Viper', 'Shelby Cobra 427': 'AC Cobra',
+  'Jeep Wrangler Rubicon': 'Jeep Wrangler (JL)', 'Ram 1500 TRX': 'Ram 1500', 'Chrysler Pacifica Hybrid': 'Chrysler Pacifica (minivan)',
+  'Tesla Model S Plaid': 'Tesla Model S', 'Lucid Air Sapphire': 'Lucid Air', 'Ferrari 12Cilindri': 'Ferrari 12Cilindri',
+  'Lamborghini Huracán EVO': 'Lamborghini Huracán', 'Lamborghini Countach LP400': 'Lamborghini Countach', 'Lamborghini Miura P400': 'Lamborghini Miura',
+  'Alfa Romeo Giulia Quadrifoglio': 'Alfa Romeo Giulia (952)', 'Rolls-Royce Phantom': 'Rolls-Royce Phantom VIII',
+  'Bentley Continental GT Speed': 'Bentley Continental GT', 'Land Rover Defender 110': 'Land Rover Defender (L663)', 'Range Rover': 'Range Rover (L460)',
+  'Jaguar E-Type Series 1': 'Jaguar E-Type', 'Mini Cooper S (1965)': 'Mini', 'Gordon Murray T.50': 'Gordon Murray Automotive T.50',
+  'Bugatti Chiron Super Sport': 'Bugatti Chiron', 'Bugatti Veyron 16.4': 'Bugatti Veyron', 'Renault Clio': 'Renault Clio',
+  'Citroën DS 21': 'Citroën DS', 'Alpine A110': 'Alpine A110 (2017)', 'Koenigsegg Jesko Absolut': 'Koenigsegg Jesko',
+  'Hyundai IONIQ 5': 'Hyundai Ioniq 5', 'Hyundai IONIQ 5 N': 'Hyundai Ioniq 5 N', 'Kia EV6 GT': 'Kia EV6', 'Xiaomi SU7 Max': 'Xiaomi SU7',
+  'NIO ET7': 'Nio ET7', 'MG4 EV': 'MG4 EV', 'Mercedes-Benz 190E 2.5-16 Evo II': 'Mercedes-Benz 190E 2.5-16 Evolution II',
+  'Lancia Delta HF Integrale Evo': 'Lancia Delta Integrale', 'Fiat 500e': 'Fiat 500 (2007)',
+}
+
 const groupFor = (type, country) => {
   if (type === 'Hypercar' || type === 'Supercar') return 'super'
   if (type === 'Muscle') return 'muscle'
@@ -183,6 +217,7 @@ export const cars = raw.map((r, i) => {
     name, brand, type, year, engine, horsepower, torque, transmission, drivetrain,
     zeroTo100, topSpeed, fuelType, priceUSD, country, description, funFact,
     image: pick(groupFor(type, country), i, 800),
+    wiki: WIKI[name] || name,
   }
 })
 

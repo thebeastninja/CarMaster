@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ProgressBar } from './ui.jsx'
+import { buzz, fireConfetti } from './Confetti.jsx'
 
 const LETTERS = ['A', 'B', 'C', 'D']
 
@@ -20,6 +21,7 @@ export default function Quiz({ questions, onFinish, title = 'Lesson Quiz', passM
     if (picked !== null) return
     setPicked(i)
     setAnswers((prev) => [...prev, i])
+    buzz(i === q.a ? 12 : [40, 50, 40])
   }
 
   const next = () => {
@@ -28,7 +30,9 @@ export default function Quiz({ questions, onFinish, title = 'Lesson Quiz', passM
       setPicked(null)
     } else {
       setDone(true)
-      onFinish?.(answers.filter((a, i) => a === questions[i].a).length)
+      const final = answers.filter((a, i) => a === questions[i].a).length
+      if (final / questions.length >= (passMark ? passMark / 100 : 1)) setTimeout(() => fireConfetti(1), 150)
+      onFinish?.(final)
     }
   }
 

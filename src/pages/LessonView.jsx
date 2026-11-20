@@ -50,7 +50,7 @@ export default function LessonView({ id }) {
         <div className="h-full bg-gradient-to-r from-racing-500 to-amberx-500" style={{ width: `${readPct}%` }} />
       </div>
       <header className="relative overflow-hidden">
-        <Img src={lesson.image.replace('w=1200', 'w=1800')} alt={lesson.title} className="absolute inset-0 h-full w-full" imgClassName="opacity-35" decorative />
+        <Img src={lesson.image.replace('w=1200', 'w=1800')} wiki={lesson.wiki} width={1280} eager alt={lesson.title} className="absolute inset-0 h-full w-full" imgClassName="opacity-35" decorative />
         <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/80 to-ink-950/40" />
         <div className="container-x relative py-12 sm:py-16">
           <nav className="text-sm text-zinc-400">

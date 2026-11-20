@@ -72,3 +72,14 @@
 @keyframes flow { to { stroke-dashoffset: -32; } }
 @keyframes spinz { to { transform: rotate(360deg); } }
 @keyframes shake { 0%,100% { transform: translateX(0) } 25% { transform: translateX(-4px) } 75% { transform: translateX(4px) } }
+
+/* Mobile polish */
+html { -webkit-tap-highlight-color: transparent; text-size-adjust: 100%; }
+button, a { touch-action: manipulation; }
+@media (max-width: 640px) {
+  .prose-car p, .prose-car li { line-height: 1.75rem; font-size: 1.02rem; }
+  .prose-car h2 { font-size: 1.45rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}

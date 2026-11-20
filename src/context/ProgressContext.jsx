@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { levels, allLessons } from '../data/lessons.js'
+import { fireConfetti } from '../components/Confetti.jsx'
 
 const KEY = 'carmaster-progress-v1'
 const ProgressContext = createContext(null)
@@ -20,6 +21,7 @@ const initial = {
   animationsSeen: {}, // animationId -> true
   lastLesson: null,
   exam: null,         // { score, total, passed, date, name }
+  arcade: {},         // game -> { best, plays, wins }
 }
 
 export const RANKS = [
@@ -47,6 +49,10 @@ export const BADGES = [
   { id: 'streak-7', name: 'Full Throttle', icon: '🚀', desc: 'Learn 7 days in a row.' },
   { id: 'explorer', name: 'Encyclopedia Explorer', icon: '📚', desc: 'Open 20 cars in the Encyclopedia.' },
   { id: 'lab-tech', name: 'Lab Technician', icon: '🧪', desc: 'Try all 5 interactive animations.' },
+  { id: 'car-spotter', name: 'Car Spotter', icon: '👀', desc: 'Score 700+ in Guess the Car.' },
+  { id: 'drag-king', name: 'Drag King', icon: '🚦', desc: 'Win 5 drag races.' },
+  { id: 'top-trumps', name: 'Spec Sheet Wizard', icon: '🃏', desc: 'Hit a 10-streak in Higher or Lower.' },
+  { id: 'redline', name: 'Redline Hero', icon: '🔊', desc: 'Hit the rev limiter in the Rev Lab.' },
 ]
 
 function load() {
@@ -75,6 +81,11 @@ function computeBadges(s) {
   if (Object.keys(s.viewedCars).length >= 20) give('explorer')
   if (Object.keys(s.animationsSeen).length >= 5) give('lab-tech')
   if (s.exam?.passed) give('pro-mechanic')
+  const ar = s.arcade || {}
+  if ((ar.guess?.best || 0) >= 700) give('car-spotter')
+  if ((ar.drag?.wins || 0) >= 5) give('drag-king')
+  if ((ar.trumps?.best || 0) >= 10) give('top-trumps')
+  if (ar.rev?.best) give('redline')
   return earned
 }
 
@@ -103,7 +114,7 @@ export function ProgressProvider({ children }) {
       const fresh = Object.keys(badges).filter((b) => !prev.badges[b])
       if (fresh.length) {
         const b = BADGES.find((x) => x.id === fresh[0])
-        setTimeout(() => setToast({ type: 'badge', ...b }), 50)
+        setTimeout(() => { setToast({ type: 'badge', ...b }); fireConfetti(0.8) }, 50)
         next.xp += fresh.length * 100
       }
       next.badges = badges
@@ -144,6 +155,12 @@ export function ProgressProvider({ children }) {
         update((s) => (s.animationsSeen[id] ? s : { ...s, animationsSeen: { ...s.animationsSeen, [id]: true }, xp: s.xp + 15 })),
       recordExam: (exam) =>
         update((s) => ({ ...s, exam: s.exam?.passed && !exam.passed ? s.exam : exam, xp: s.xp + (exam.passed && !s.exam?.passed ? 500 : 0) })),
+      recordArcade: (game, { score = 0, win = false, xp = 0 } = {}) =>
+        update((s) => {
+          const prev = (s.arcade || {})[game] || { best: 0, plays: 0, wins: 0 }
+          const next = { best: Math.max(prev.best, score), plays: prev.plays + 1, wins: prev.wins + (win ? 1 : 0) }
+          return { ...s, arcade: { ...(s.arcade || {}), [game]: next }, xp: s.xp + xp }
+        }),
       reset: () => { setState(initial) },
     }
   }, [state, toast, update])

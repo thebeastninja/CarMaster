@@ -12,7 +12,7 @@ export default function CarCard({ car, onOpen }) {
   return (
     <button onClick={() => onOpen(car)} className="card card-hover group flex flex-col overflow-hidden text-left">
       <div className="relative">
-        <Img src={car.image} alt={car.name} className="aspect-[16/10] w-full" imgClassName="group-hover:scale-105" />
+        <Img wiki={car.wiki} width={640} alt={car.name} className="aspect-[16/10] w-full" imgClassName="group-hover:scale-105" />
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-ink-850 to-transparent" />
         <span className={`absolute left-3 top-3 rounded-full border px-2 py-0.5 text-[11px] font-bold backdrop-blur ${fuelColor[car.fuelType]}`}>{car.fuelType}</span>
         <span className="absolute right-3 top-3 rounded-full bg-black/60 px-2 py-0.5 text-[11px] font-semibold text-zinc-200 backdrop-blur">{car.year}</span>

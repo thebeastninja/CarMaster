@@ -14,6 +14,7 @@ Built with **React 18 + Vite + Tailwind CSS**. There is no backend: progress, XP
 | **Interactive Garage** | Clickable car cut-away (11 components) and an animation lab |
 | **Engines Lab** | Slow-motion 4-stroke engine, 13 engine layouts with animated schematics, interactive horsepower-vs-torque chart, turbo/supercharger/NA simulator, parts glossary |
 | **Pricing & Parts** | 40 parts with low/avg/high cost in USD and EUR, failure signs, DIY difficulty, lifespan and tips; a yearly running-cost calculator; maintenance schedule |
+| **Arcade** | Drag Race (any two real cars, Christmas-tree start, reaction time, physics from real 0–100 times), Guess the Car (blurred real photo + clues), Higher or Lower (spec showdown streaks), Rev Lab (live synthesised V8/V10/V12/flat-6/rotary/EV sound) |
 | **Quiz & Certification** | XP ranks, 14 badges, a quick quiz, a 30-question Final Exam and a printable **CarMaster Pro Certificate** with your name |
 
 ### Interactive animations (SVG + `requestAnimationFrame`)
@@ -23,6 +24,32 @@ Built with **React 18 + Vite + Tailwind CSS**. There is no backend: progress, XP
 - **Turbocharger**: turbine/compressor spool and lag, wastegate, blow-off valve; supercharger and NA modes
 - **Drivetrain**: FWD/RWD/AWD/4WD power flow on dry/wet/snow/ice, wheelspin, cornering and driveline wind-up
 - **Dashboard warning lights**: 20 lights with meaning, urgency and what to do
+
+## Phone-first
+- Bottom tab bar, safe-area support for notched phones, big touch targets, haptic feedback
+- Installable as an app (PWA): open the site on your phone, then **Share → Add to Home Screen** (iPhone) or **⋮ → Install app** (Android)
+- Works offline after the first visit (service worker caches the app and the car photos you've seen)
+- Every page except the dashboard is code-split; animations pause when off-screen or when the tab is hidden to save battery
+
+## Real car photos
+Each of the 147 cars is linked to its Wikipedia article. The browser asks Wikipedia's API for the lead photo of up to 50 articles per request (3 requests cover the whole encyclopedia), caches the results for two weeks and lazy-loads the images. If a photo is unavailable, a drawn illustration is shown. Photos are © their authors on Wikimedia Commons under free licences.
+
+## Deploy (free)
+
+**Option A: Vercel (easiest, works from a phone)**
+1. Go to vercel.com and sign in with GitHub.
+2. *Add New → Project* → pick `CarMaster` → *Deploy*. Settings are auto-detected (`vercel.json`).
+3. You get a URL like `carmaster.vercel.app`. Every push to `main` redeploys.
+
+**Option B: Netlify**
+1. app.netlify.com → *Add new site → Import from Git* → pick the repo. `netlify.toml` sets everything. Deploy.
+
+**Option C: GitHub Pages (already wired up)**
+1. Merge this work into `main`.
+2. Repo *Settings → Pages → Build and deployment → Source: GitHub Actions*.
+3. The included workflow (`.github/workflows/deploy.yml`) builds and publishes on every push to `main`. Your site: `https://<your-username>.github.io/CarMaster/`.
+
+The app uses relative paths and hash routing, so it works on any static host or sub-folder with no extra config.
 
 ## Getting started
 

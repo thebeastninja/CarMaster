@@ -32,6 +32,7 @@ export default function TurboAnimation() {
   const [maxBoost, setMaxBoost] = useState(1.2)
   const sim = useRef({ rpm: 1500, spool: 0, boost: 0, angle: 0, ex: 0, inn: 0, belt: 0, bov: 0, lastThrottle: 0.3, wastegate: 0 })
 
+  const frameRef = useRef(null)
   useLoop(true, (dt) => {
     const s = sim.current
     const targetRpm = 900 + throttle * 6100
@@ -61,7 +62,7 @@ export default function TurboAnimation() {
     s.inn += dt * (15 + (load + s.boost * 0.5) * 140)
     s.belt += dt * s.rpm * 0.03
     s.turboRpm = turboRpm
-  })
+  }, frameRef)
 
   const s = sim.current
   const hp = Math.round(160 * (s.rpm / 6000) * (s.rpm > 6200 ? 0.97 : 1) * (1 + s.boost) * (mode === 'super' ? 0.9 : 1) * (0.25 + throttle * 0.75))
@@ -157,6 +158,7 @@ export default function TurboAnimation() {
 
   return (
     <AnimFrame
+      frameRef={frameRef}
       title="Turbo vs Supercharger vs NA"
       subtitle="Control the throttle and see how forced induction crams air into the engine."
       side={side}

@@ -49,6 +49,7 @@ export default function DrivetrainAnimation() {
   const split = layout === 'AWD' && slipping ? [50, 50] : L.split
   const accel = Math.min(demand, available)
 
+  const frameRef = useRef(null)
   useLoop(true, (dt) => {
     const s = sim.current
     s.speed += (accel * 120 - s.speed) * Math.min(1, dt * 0.8)
@@ -63,7 +64,7 @@ export default function DrivetrainAnimation() {
       if (layout === '4WD' && corner) v = base // locked: all wheels forced to same speed
       s.phase[k] += v * dt
     }
-  })
+  }, frameRef)
 
   const s = sim.current
   const frontDriven = split[0] > 0
@@ -143,6 +144,7 @@ export default function DrivetrainAnimation() {
 
   return (
     <AnimFrame
+      frameRef={frameRef}
       title="Where Does the Power Go?"
       subtitle="Choose a drivetrain and surface, then add throttle to see traction (and wheelspin)."
       side={side}

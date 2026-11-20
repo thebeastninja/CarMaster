@@ -2,13 +2,14 @@ import { useState } from 'react'
 import { useProgress } from '../context/ProgressContext.jsx'
 
 export const NAV = [
-  { to: '/', key: '', label: 'Dashboard', icon: '🏠' },
-  { to: '/learn', key: 'learn', label: 'Learn', icon: '📘' },
-  { to: '/encyclopedia', key: 'encyclopedia', label: 'Encyclopedia', icon: '🚗' },
-  { to: '/garage', key: 'garage', label: 'Garage', icon: '🔧' },
-  { to: '/engines', key: 'engines', label: 'Engines Lab', icon: '🔥' },
-  { to: '/pricing', key: 'pricing', label: 'Pricing & Parts', icon: '💲' },
-  { to: '/quiz', key: 'quiz', label: 'Quiz & Cert', icon: '🏆' },
+  { to: '/', key: '', label: 'Dashboard', short: 'Home', icon: '🏠' },
+  { to: '/learn', key: 'learn', label: 'Learn', short: 'Learn', icon: '📘' },
+  { to: '/encyclopedia', key: 'encyclopedia', label: 'Encyclopedia', short: 'Cars', icon: '🚗' },
+  { to: '/arcade', key: 'arcade', label: 'Arcade', short: 'Arcade', icon: '🎮' },
+  { to: '/garage', key: 'garage', label: 'Garage', short: 'Garage', icon: '🔧' },
+  { to: '/engines', key: 'engines', label: 'Engines Lab', short: 'Engines', icon: '🔥' },
+  { to: '/pricing', key: 'pricing', label: 'Pricing & Parts', short: 'Prices', icon: '💲' },
+  { to: '/quiz', key: 'quiz', label: 'Quiz & Cert', short: 'Quiz', icon: '🏆' },
 ]
 
 export function Logo({ small }) {
@@ -30,10 +31,9 @@ export function Logo({ small }) {
 }
 
 export default function Navbar({ current }) {
-  const [open, setOpen] = useState(false)
   const { state, rank } = useProgress()
   return (
-    <header className="no-print sticky top-0 z-40 border-b border-white/[0.06] bg-ink-950/80 backdrop-blur-xl">
+    <header className="no-print sticky top-0 z-40 pt-[env(safe-area-inset-top)] border-b border-white/[0.06] bg-ink-950/80 backdrop-blur-xl">
       <div className="container-x flex h-16 items-center justify-between gap-4">
         <Logo />
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
@@ -45,43 +45,66 @@ export default function Navbar({ current }) {
                 href={`#${n.to}`}
                 className={`relative rounded-lg px-3 py-2 text-sm font-medium transition ${active ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
               >
-                {n.label}
+                {n.short}
                 {active && <span className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-gradient-to-r from-racing-500 to-amberx-500" />}
               </a>
             )
           })}
         </nav>
         <div className="flex items-center gap-2">
-          <a href="#/quiz" className="hidden items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-1.5 sm:flex" title={rank.name}>
+          <a href="#/quiz" className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-1.5" title={rank.name}>
             <span className="text-base">{rank.icon}</span>
             <span className="text-xs leading-tight">
               <span className="block font-semibold text-white">{state.xp.toLocaleString()} XP</span>
               <span className="block text-zinc-500">🔥 {state.streak} day{state.streak === 1 ? '' : 's'}</span>
             </span>
           </a>
-          <button className="btn-ghost !px-3 lg:hidden" onClick={() => setOpen(!open)} aria-label="Toggle menu" aria-expanded={open}>
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
-            </svg>
-          </button>
         </div>
       </div>
-      {open && (
-        <nav className="border-t border-white/[0.06] bg-ink-950/95 lg:hidden" aria-label="Mobile">
-          <div className="container-x grid grid-cols-2 gap-2 py-3 sm:grid-cols-3">
-            {NAV.map((n) => (
-              <a
-                key={n.to}
-                href={`#${n.to}`}
-                onClick={() => setOpen(false)}
-                className={`flex items-center gap-2 rounded-xl px-3 py-3 text-sm font-medium ${current === n.key ? 'bg-racing-500/15 text-racing-300' : 'bg-white/[0.03] text-zinc-300'}`}
-              >
-                <span>{n.icon}</span>{n.label}
-              </a>
-            ))}
-          </div>
-        </nav>
-      )}
     </header>
+  )
+}
+
+const TABS = ['', 'learn', 'encyclopedia', 'arcade']
+
+/** Phone-style bottom tab bar (hidden on large screens). */
+export function BottomNav({ current }) {
+  const [more, setMore] = useState(false)
+  const tabs = NAV.filter((n) => TABS.includes(n.key))
+  const rest = NAV.filter((n) => !TABS.includes(n.key))
+  const moreActive = rest.some((n) => n.key === current)
+  return (
+    <>
+      {more && (
+        <div className="no-print fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" onClick={() => setMore(false)}>
+          <div className="absolute inset-x-3 bottom-[calc(76px+env(safe-area-inset-bottom))] animate-fadeUp rounded-2xl border border-white/10 bg-ink-900 p-3 shadow-card" onClick={(e) => e.stopPropagation()}>
+            <div className="grid grid-cols-2 gap-2">
+              {rest.map((n) => (
+                <a key={n.to} href={`#${n.to}`} onClick={() => setMore(false)} className={`flex items-center gap-3 rounded-xl px-4 py-4 text-sm font-semibold ${current === n.key ? 'bg-racing-500/15 text-racing-300' : 'bg-white/[0.04] text-zinc-200 active:bg-white/10'}`}>
+                  <span className="text-xl">{n.icon}</span>{n.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+      <nav className="no-print fixed inset-x-0 bottom-0 z-40 border-t border-white/[0.08] bg-ink-950/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden" aria-label="Tabs">
+        <div className="grid grid-cols-5">
+          {tabs.map((n) => {
+            const active = current === n.key
+            return (
+              <a key={n.to} href={`#${n.to}`} onClick={() => setMore(false)} className={`relative flex flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold ${active ? 'text-white' : 'text-zinc-500'}`}>
+                {active && <span className="absolute top-0 h-0.5 w-8 rounded-full bg-gradient-to-r from-racing-500 to-amberx-500" />}
+                <span className={`text-xl transition ${active ? 'scale-110' : 'grayscale-[60%]'}`}>{n.icon}</span>{n.short}
+              </a>
+            )
+          })}
+          <button onClick={() => setMore(!more)} className={`relative flex flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold ${moreActive || more ? 'text-white' : 'text-zinc-500'}`}>
+            {moreActive && <span className="absolute top-0 h-0.5 w-8 rounded-full bg-gradient-to-r from-racing-500 to-amberx-500" />}
+            <span className="text-xl">{more ? '✕' : '☰'}</span>More
+          </button>
+        </div>
+      </nav>
+    </>
   )
 }

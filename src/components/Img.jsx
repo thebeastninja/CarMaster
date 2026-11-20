@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useWikiImage, sizedWiki } from '../lib/wikiImages.js'
 
 // Deterministic hue from a string, so fallbacks look varied but stable.
 const hueOf = (s = '') => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 360, 7)
@@ -22,8 +23,8 @@ function Fallback({ label, className, decorative }) {
     <div
       className={`relative flex items-center justify-center overflow-hidden ${className}`}
       style={{ background: `radial-gradient(120% 90% at 20% 10%, hsl(${(h + 10) % 360} 70% 22%), #0c0d10 70%)` }}
-      role="img"
-      aria-label={label}
+      role={decorative ? undefined : 'img'}
+      aria-label={decorative ? undefined : label}
     >
       <div className="grid-bg absolute inset-0 opacity-60" />
       {!decorative && <CarSilhouette className="relative w-2/3 max-w-[260px]" style={{ color: `hsl(${h} 85% 58%)` }} />}
@@ -31,23 +32,47 @@ function Fallback({ label, className, decorative }) {
   )
 }
 
-export default function Img({ src, alt = '', className = '', imgClassName = '', decorative = false }) {
-  const [failed, setFailed] = useState(!src)
+/**
+ * Image with a cascade: real Wikipedia photo (wiki title) → Unsplash (src) → illustration.
+ */
+export default function Img({ src, wiki, alt = '', className = '', imgClassName = '', decorative = false, width = 960, eager = false, fit = 'cover' }) {
+  const wikiUrl = useWikiImage(wiki)
+  const [stage, setStage] = useState(0) // 0 wiki, 1 src, 2 fallback
   const [loaded, setLoaded] = useState(false)
-  if (failed) return <Fallback label={alt} className={className} decorative={decorative} />
+
+  useEffect(() => { setStage(0); setLoaded(false) }, [wiki, src])
+
+  let url = null
+  if (stage === 0 && wiki) {
+    if (wikiUrl === undefined) url = undefined // still resolving
+    else if (wikiUrl) url = sizedWiki(wikiUrl, width)
+  }
+  if (url === null && stage <= 1 && src) url = src
+
+  if (url === null) return <Fallback label={alt} className={className} decorative={decorative} />
+
+  const onError = () => {
+    setLoaded(false)
+    if (stage === 0 && wikiUrl && src) setStage(1)
+    else setStage(2)
+  }
+  if (stage === 2) return <Fallback label={alt} className={className} decorative={decorative} />
+
   return (
     <div className={`relative overflow-hidden bg-ink-800 ${className}`}>
       {!loaded && <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-ink-700 to-ink-850" />}
-      <img
-        src={src}
-        alt={alt}
-        loading="lazy"
-        decoding="async"
-        referrerPolicy="no-referrer"
-        onLoad={() => setLoaded(true)}
-        onError={() => setFailed(true)}
-        className={`h-full w-full object-cover transition duration-700 ${loaded ? 'opacity-100' : 'opacity-0'} ${imgClassName}`}
-      />
+      {url && (
+        <img
+          src={url}
+          alt={decorative ? '' : alt}
+          loading={eager ? 'eager' : 'lazy'}
+          decoding="async"
+          referrerPolicy="no-referrer"
+          onLoad={() => setLoaded(true)}
+          onError={onError}
+          className={`h-full w-full ${fit === 'contain' ? 'object-contain' : 'object-cover'} transition duration-700 ${loaded ? 'opacity-100' : 'opacity-0'} ${imgClassName}`}
+        />
+      )}
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import CarCard from '../components/CarCard.jsx'
 import Img from '../components/Img.jsx'
 import { SectionHeader, money } from '../components/ui.jsx'
@@ -37,6 +37,8 @@ export default function Encyclopedia({ query }) {
   const [open, setOpen] = useState(null)
   const [compare, setCompare] = useState([])
   const [showFilters, setShowFilters] = useState(false)
+  const [limit, setLimit] = useState(24)
+  const sentinel = useRef(null)
   const { viewCar } = useProgress()
 
   useEffect(() => {
@@ -57,6 +59,15 @@ export default function Encyclopedia({ query }) {
       .filter((c) => !q || `${c.name} ${c.brand} ${c.type} ${c.engine} ${c.country} ${c.year}`.toLowerCase().includes(q))
       .sort(SORTS[sort].fn)
   }, [search, type, brand, fuel, country, price, minHp, sort])
+
+  useEffect(() => { setLimit(24) }, [search, type, brand, fuel, country, price, minHp, sort])
+  useEffect(() => {
+    const el = sentinel.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) setLimit((l) => l + 24) }, { rootMargin: '600px' })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [tab, filtered.length, limit])
 
   const reset = () => { setSearch(''); setType('All'); setBrand('All'); setFuel('All'); setCountry('All'); setPrice('all'); setMinHp(0) }
   const toggleCompare = (c) => setCompare((prev) => (prev.find((x) => x.id === c.id) ? prev.filter((x) => x.id !== c.id) : prev.length >= 3 ? prev : [...prev, c]))
@@ -115,9 +126,13 @@ export default function Encyclopedia({ query }) {
 
           {filtered.length ? (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filtered.map((c) => <CarCard key={c.id} car={c} onOpen={setOpen} />)}
+              {filtered.slice(0, limit).map((c) => <CarCard key={c.id} car={c} onOpen={setOpen} />)}
             </div>
-          ) : (
+          ) : null}
+          {filtered.length > limit && (
+            <div ref={sentinel} className="mt-6 flex justify-center"><button className="btn-ghost" onClick={() => setLimit(limit + 24)}>Show more ({filtered.length - limit} left)</button></div>
+          )}
+          {!filtered.length && (
             <div className="card p-12 text-center text-zinc-400">No cars match these filters. <button className="text-racing-400" onClick={reset}>Reset</button></div>
           )}
         </>
@@ -157,7 +172,7 @@ function CarModal({ car, onClose, compare, toggleCompare }) {
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-6" onClick={onClose} role="dialog" aria-modal="true" aria-label={car.name}>
       <div className="card max-h-[92vh] w-full max-w-4xl animate-fadeUp overflow-y-auto rounded-b-none sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="relative">
-          <Img src={car.image.replace('w=800', 'w=1600')} alt={car.name} className="aspect-[16/7] w-full" />
+          <Img wiki={car.wiki} width={1280} eager alt={car.name} className="aspect-[16/9] w-full sm:aspect-[16/7]" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink-850 via-transparent" />
           <button onClick={onClose} className="absolute right-3 top-3 grid h-10 w-10 place-items-center rounded-full bg-black/60 text-xl text-white backdrop-blur hover:bg-black/80" aria-label="Close">×</button>
           <div className="absolute bottom-4 left-5 right-5">
@@ -179,6 +194,8 @@ function CarModal({ car, onClose, compare, toggleCompare }) {
             </div>
             <div className="mt-5 flex flex-wrap gap-2">
               <button className={inCompare ? 'btn-primary' : 'btn-ghost'} onClick={() => toggleCompare(car)}>{inCompare ? '✓ In compare' : '+ Compare'}</button>
+              <a className="btn-ghost" href={`https://en.wikipedia.org/wiki/${encodeURIComponent(car.wiki.replace(/ /g, '_'))}`} target="_blank" rel="noreferrer">📖 Wikipedia</a>
+              <a className="btn-ghost" href={`#/arcade/drag?car=${car.id}`}>🚦 Drag race it</a>
             </div>
           </div>
           <dl className="divide-y divide-white/[0.06] rounded-xl border border-white/[0.07] text-sm">
@@ -214,7 +231,7 @@ function CompareTray({ cars: list, onRemove, onClear }) {
     ['Price', (c) => money(c.priceUSD), (c) => c.priceUSD, 'min'],
   ]
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-ink-900/95 backdrop-blur-xl">
+    <div className="fixed inset-x-0 bottom-[calc(62px+env(safe-area-inset-bottom))] z-30 border-t border-white/10 bg-ink-900/95 backdrop-blur-xl lg:bottom-0">
       <div className="container-x py-3">
         <div className="flex items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2 overflow-x-auto no-scrollbar">
@@ -260,7 +277,7 @@ function TypesGuide({ onPick }) {
         const count = cars.filter((c) => (byFuel ? c.fuelType === filterType : c.type === filterType)).length
         return (
           <div key={t.id} className="card flex flex-col overflow-hidden sm:flex-row">
-            <Img src={t.img} alt={t.name} className="h-40 w-full shrink-0 sm:h-auto sm:w-44" />
+            <Img wiki={t.wiki} width={480} alt={t.name} className="h-40 w-full shrink-0 sm:h-auto sm:w-44" />
             <div className="flex-1 p-5">
               <div className="flex items-start justify-between gap-2">
                 <h3 className="font-display text-xl font-bold text-white">{t.name}</h3>

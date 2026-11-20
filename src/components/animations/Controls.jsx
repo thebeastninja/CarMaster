@@ -22,9 +22,9 @@ export function Slider({ label, value, min, max, step = 0.01, onChange, format =
   )
 }
 
-export function AnimFrame({ title, subtitle, children, controls, side }) {
+export function AnimFrame({ title, subtitle, children, controls, side, frameRef }) {
   return (
-    <div className="card overflow-hidden">
+    <div ref={frameRef} className="card overflow-hidden">
       <div className="flex flex-col gap-1 border-b border-white/[0.06] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="eyebrow">Interactive</div>

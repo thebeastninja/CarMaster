@@ -10,7 +10,7 @@ export default function LessonCard({ lesson, number, locked }) {
       href={`#/learn/${lesson.id}`}
       className={`card card-hover group flex overflow-hidden ${locked ? 'opacity-70' : ''}`}
     >
-      <Img src={lesson.image} alt={lesson.title} className="hidden h-auto w-36 shrink-0 sm:block" imgClassName="group-hover:scale-105" />
+      <Img src={lesson.image} wiki={lesson.wiki} width={400} alt={lesson.title} className="h-auto w-24 shrink-0 sm:w-36" imgClassName="group-hover:scale-105" />
       <div className="flex min-w-0 flex-1 flex-col p-4">
         <div className="flex items-center gap-2 text-xs text-zinc-500">
           <span className="font-display font-bold text-racing-400">LESSON {number}</span>

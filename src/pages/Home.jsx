@@ -13,6 +13,7 @@ const SECTIONS = [
   { href: '#/engines', icon: '🔥', title: 'Engines Lab', desc: 'Every engine layout, power curves and how parts fit together.' },
   { href: '#/pricing', icon: '💲', title: 'Pricing & Parts', desc: 'Real repair costs for 40+ parts and a yearly cost calculator.' },
   { href: '#/quiz', icon: '🏆', title: 'Quiz & Certification', desc: 'Earn badges and the CarMaster Pro Certificate.' },
+  { href: '#/arcade', icon: '🎮', title: 'Arcade', desc: 'Drag races, Guess the Car, Higher or Lower and the Rev Lab.' },
 ]
 
 export function useNextLesson() {
@@ -67,7 +68,7 @@ export default function Home() {
           <div className="card flex flex-col overflow-hidden">
             {next ? (
               <>
-                <Img src={next.image} alt={next.title} className="h-32 w-full" />
+                <Img src={next.image} wiki={next.wiki} width={640} alt={next.title} className="h-32 w-full" />
                 <div className="flex flex-1 flex-col p-5">
                   <div className="eyebrow">Continue learning</div>
                   <div className="mt-1 text-xs text-zinc-500">Level {next.level} · {next.levelTitle}</div>
@@ -95,7 +96,7 @@ export default function Home() {
             <div className="mt-4 text-xs text-zinc-500">A new fact every day. Come back tomorrow to keep your streak alive.</div>
           </div>
           <a href={`#/encyclopedia?car=${car.id}`} className="card card-hover group grid overflow-hidden sm:grid-cols-2 lg:col-span-3">
-            <Img src={car.image} alt={car.name} className="h-56 w-full sm:h-full" imgClassName="group-hover:scale-105" />
+            <Img wiki={car.wiki} alt={car.name} className="h-56 w-full sm:h-full" imgClassName="group-hover:scale-105" />
             <div className="p-6">
               <div className="eyebrow">Featured car of the day</div>
               <h3 className="mt-2 font-display text-2xl font-bold text-white">{car.name}</h3>
@@ -108,6 +109,22 @@ export default function Home() {
               </div>
             </div>
           </a>
+        </div>
+
+        {/* Arcade promo */}
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {[
+            ['drag', '🚦', 'Drag Race', 'Race any two real cars', 'from-emerald-500/25'],
+            ['guess', '👀', 'Guess the Car', 'Blurred photo + clues', 'from-racing-500/25'],
+            ['trumps', '🃏', 'Higher or Lower', 'Spec-sheet showdown', 'from-sky-500/25'],
+            ['rev', '🔊', 'Rev Lab', 'Hear a V12 scream', 'from-fuchsia-500/25'],
+          ].map(([id, icon, title, desc, grad]) => (
+            <a key={id} href={`#/arcade/${id}`} className={`card card-hover relative overflow-hidden bg-gradient-to-br ${grad} to-transparent p-4`}>
+              <div className="text-3xl">{icon}</div>
+              <div className="mt-2 font-display text-lg font-bold leading-tight text-white">{title}</div>
+              <div className="text-xs text-zinc-400">{desc}</div>
+            </a>
+          ))}
         </div>
 
         {/* Levels overview */}

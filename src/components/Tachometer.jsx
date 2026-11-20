@@ -20,7 +20,8 @@ export default function Tachometer() {
   const reduced = usePrefersReducedMotion()
   const { percent, rank } = useProgress()
   const t = useRef(0)
-  useLoop(!reduced, (dt) => { t.current += dt })
+  const frameRef = useRef(null)
+  useLoop(!reduced, (dt) => { t.current += dt }, frameRef)
   const time = t.current
   const cycle = time % 4
   // idle → rev up → shift → settle
@@ -29,7 +30,7 @@ export default function Tachometer() {
   const cx = 200, cy = 200
 
   return (
-    <svg viewBox="0 0 400 400" className="w-full max-w-[420px] drop-shadow-[0_0_60px_rgba(255,77,31,0.25)]" aria-hidden="true">
+    <svg ref={frameRef} viewBox="0 0 400 400" className="w-full max-w-[420px] drop-shadow-[0_0_60px_rgba(255,77,31,0.25)]" aria-hidden="true">
       <defs>
         <radialGradient id="tachBg" cx="50%" cy="45%"><stop offset="0" stopColor="#1f2229" /><stop offset="1" stopColor="#07080a" /></radialGradient>
         <linearGradient id="tachArc" x1="0" x2="1"><stop offset="0" stopColor="#ff9f1c" /><stop offset="1" stopColor="#ff4d1f" /></linearGradient>

@@ -14,6 +14,7 @@ export default function BrakeAnimation() {
   const [abs, setAbs] = useState(true)
   const sim = useRef({ speed: 100, rot: 0, temp: 20, t: 0, dist: 0, locked: false, absActive: false, applied: 0, stopDist: null })
 
+  const frameRef = useRef(null)
   useLoop(true, (dt) => {
     const s = sim.current
     s.t += dt
@@ -37,7 +38,7 @@ export default function BrakeAnimation() {
     if (before > 0 && s.speed === 0 && holding && s.stopDist === null) s.stopDist = s.dist
     if (!s.locked) s.rot = (s.rot + s.speed * dt * 9) % 360
     s.temp += (p * before * dt * 1.6) - (s.temp - 20) * dt * 0.25
-  })
+  }, frameRef)
 
   const s = sim.current
   const p = s.applied
@@ -128,6 +129,7 @@ export default function BrakeAnimation() {
 
   return (
     <AnimFrame
+      frameRef={frameRef}
       title="How Brakes Work"
       subtitle="Hold the brake button. Compare stops with ABS on and off."
       side={side}
@@ -135,7 +137,7 @@ export default function BrakeAnimation() {
         <>
           <button
             className={`btn select-none ${holding ? 'bg-red-600 text-white' : 'bg-red-500/90 text-white hover:bg-red-500'} !px-6`}
-            onPointerDown={(e) => { e.currentTarget.setPointerCapture?.(e.pointerId); setHolding(true) }}
+            onPointerDown={(e) => { try { e.currentTarget.setPointerCapture?.(e.pointerId) } catch { /* synthetic event */ } setHolding(true) }}
             onPointerUp={() => setHolding(false)}
             onPointerCancel={() => setHolding(false)}
             onKeyDown={(e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setHolding(true) } }}

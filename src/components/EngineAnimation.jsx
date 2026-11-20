@@ -36,7 +36,8 @@ export default function EngineAnimation({ compact }) {
   useEffect(() => { seeAnimation('fourStroke') }, [seeAnimation])
 
   // 1× = 120° of crank per second (one full cycle every 6 s)
-  useLoop(playing, (dt) => { angle.current = (angle.current + dt * 120 * speed) % 720 })
+  const frameRef = useRef(null)
+  useLoop(playing, (dt) => { angle.current = (angle.current + dt * 120 * speed) % 720 }, frameRef)
 
   const a = ((angle.current % 720) + 720) % 720
   const strokeIdx = Math.floor(a / 180)
@@ -163,6 +164,7 @@ export default function EngineAnimation({ compact }) {
   const rpm = Math.round(speed * 20)
   return (
     <AnimFrame
+      frameRef={frameRef}
       title="Four-Stroke Engine Cycle"
       subtitle="Watch the piston, valves, spark and crankshaft. Click a stroke to jump to it."
       side={side}

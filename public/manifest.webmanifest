@@ -1,0 +1,17 @@
+{
+  "name": "CarMaster – From Zero to Pro",
+  "short_name": "CarMaster",
+  "description": "Learn everything about cars: how they work, engines, real cars of the world, buying, maintenance, tuning and racing. With games!",
+  "start_url": "./#/",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07080a",
+  "theme_color": "#07080a",
+  "categories": ["education", "games"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

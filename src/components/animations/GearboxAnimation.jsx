@@ -56,6 +56,7 @@ export default function GearboxAnimation() {
   const [grind, setGrind] = useState(false)
   const s = useRef({ engine: 0, input: 0, lay: 0, out: {}, output: 0, inputSpeed: 1 })
 
+  const frameRef = useRef(null)
   useLoop(true, (dt) => {
     const st = s.current
     const engineW = (rpm / 60) * 2 * Math.PI * 0.05 // slowed for visibility
@@ -70,7 +71,7 @@ export default function GearboxAnimation() {
       st.out[g] = (st.out[g] || 0) + inW * outFactor(g) * dt
     }
     st.output += inW * outFactor(gear) * dt
-  })
+  }, frameRef)
 
   const shift = (g) => {
     if (g === gear) return
@@ -171,6 +172,7 @@ export default function GearboxAnimation() {
 
   return (
     <AnimFrame
+      frameRef={frameRef}
       title="Manual Transmission"
       subtitle="Press the clutch, pick a gear on the shifter, release the clutch and watch the power flow."
       side={side}

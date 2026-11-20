@@ -66,7 +66,7 @@ export function Toast() {
   }, [toast, clearToast])
   if (!toast) return null
   return (
-    <div className="no-print fixed bottom-5 left-1/2 z-50 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 animate-pop">
+    <div className="no-print fixed bottom-[calc(84px+env(safe-area-inset-bottom))] left-1/2 z-50 w-[calc(100%-2rem)] lg:bottom-5 max-w-sm -translate-x-1/2 animate-pop">
       <div className="card flex items-center gap-3 border-racing-500/40 p-4 shadow-glow">
         <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-racing-500/30 to-amberx-500/20 text-2xl">{toast.icon}</div>
         <div className="min-w-0">
